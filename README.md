@@ -1,6 +1,7 @@
-# Haskap Pie: A Halo finding Algorithm with efficient Sampling, K-means clustering, tree-Assembly, Particle tracking, Python modules, Inter-code applicability, and Energy solving
+# Haskap Pie: 
 
-========
+A Halo finding Algorithm with efficient Sampling, K-means clustering, tree-Assembly, Particle tracking, Python modules, Inter-code applicability, and Energy solving
+
 
 version v1.0.0
 
