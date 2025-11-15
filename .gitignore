@@ -13,4 +13,3 @@ env
 .vscode
 *.dll
 .libs
-test_new.yml

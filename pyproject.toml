@@ -34,12 +34,6 @@ dependencies = [
 
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "pytest-cov",
-]
-
 [project.urls]
 "Homepage" = "https://github.com/ksbarrow/Haskap_Pie"
 "Source" = "https://github.com/ksbarrow/Haskap_Pie"
