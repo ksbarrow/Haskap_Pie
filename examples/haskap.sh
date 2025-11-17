@@ -23,4 +23,4 @@
 ## $3 is same os save directory: eg. box1
 ## $4 is number of timesteps to skip, default should be 1.
 
-srun python src/haskap/haskap.py $1 $2 $3 $4
+srun python run_haskap.py $1 $2 $3 $4

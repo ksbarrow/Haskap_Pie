@@ -23,7 +23,7 @@ pip install .
 
 Using pip, Haskap Pie can be installed with the following:
 ```
-python -m pip install haskap --target /path/to/install/
+python -m pip install haskappie
 ```
 
 ## Documentation
@@ -53,6 +53,8 @@ project_dir
 |
 |-/path/to/sims/box1 (or name of simulation box here)
 ```
+
+To create a script for intialize and run Haskap Pie, see the example script in [examples](examples/). This initializes and calls all revelvant functions from helper files, and calls the main `Evolve_Tree function`. 
 
 To run Haskap Pie, use the example bash file `haskap.sh` in the following way from the root directory
 
