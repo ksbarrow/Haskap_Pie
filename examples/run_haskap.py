@@ -1,4 +1,5 @@
-from haskap import Evolve_Tree, ensure_dir, make_pfs_allsnaps, minmass_calc
+from haskap.haskap import Evolve_Tree, ensure_dir, minmass_calc
+from haskap.make_pfs_allsnaps import make_pfs_allsnaps
 import sys, os
 import yt
 import gc

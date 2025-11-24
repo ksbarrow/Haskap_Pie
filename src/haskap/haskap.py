@@ -26,8 +26,8 @@ matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 19})
 import matplotlib.pyplot as plt
 from natsort import natsorted
-from Find_Refined import Find_Refined
-from make_pfs_allsnaps import make_pfs_allsnaps
+from haskap.Find_Refined import Find_Refined
+from haskap.make_pfs_allsnaps import make_pfs_allsnaps
 if int((yt.__version__).split('.')[0]) >= 4 and int((yt.__version__).split('.')[1]) >= 2: #ParticleUnion is only available in yt 4.2 and later
     from yt.data_objects.unions import ParticleUnion
 else:
