@@ -95,3 +95,5 @@ sbatch run_haskap.py /path/to/sims/box1 code_type /path/to/save/ num_skip
 ```
 
 changing the required account settings as needed.
+
+For any questions regarding Haskap Pie, contact Dr. Kirk Barrow  at kbarrow [at] illinois [dot] edu
