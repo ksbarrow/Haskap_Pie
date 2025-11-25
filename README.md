@@ -3,8 +3,6 @@
 A Halo finding Algorithm with efficient Sampling, K-means clustering, tree-Assembly, Particle tracking, Python modules, Inter-code applicability, and Energy solving
 
 
-version v1.0.0
-
 ## References
 
 When using this code, please cite the following papers:
