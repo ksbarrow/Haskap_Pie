@@ -7105,7 +7105,7 @@ if __name__ == "__main__":
         END = False
         path = string
         find_dm = True
-        find_stars = True
+        find_stars = False
         resave = False
         last_timestep = len(fld_list) - 1
         if fake:
@@ -7123,7 +7123,7 @@ if __name__ == "__main__":
         # if resave:
         #     resave_particles()
         Evolve_Tree(plot=False,codetp=code,skip_large=False,verbose=False,\
-            from_tree=False,last_timestep=last_timestep,multitree=True,refined=refined,video=True,trackbig=False,tracktime=True)
+            from_tree=False,last_timestep=last_timestep,multitree=True,refined=refined,video=False,trackbig=False,tracktime=True)
         if organize_files and rank==0:
             tmp_folder = savestring+'/tmp_files/'
             os.system('rm -r %s' % tmp_folder)
