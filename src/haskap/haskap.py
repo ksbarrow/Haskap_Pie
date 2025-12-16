@@ -704,13 +704,13 @@ class Evolve_Tree():
                 self.halotree[k]['Consec_Forced'] = 0
 
     def open_all_ds(self,codetp):
-        # The conversion factor from code_length to physical unit is not correct in AGORA's GADGET3 and AREPO
+        # The conversion factor from code_length to physical unit is not correct in AGORA's GADGET3, GADGET4, and AREPO
         self.ds_list = {}
         for timestep in range(len(fld_list)):
             self.ds_list[timestep] = {}
             if codetp == 'AREPO':
                 self.ds_list[timestep]['ds'] = yt.load(fld_list[timestep], unit_base = {"length": (1.0, "Mpccm/h")})
-            elif codetp == 'GADGET3':
+            elif codetp == 'GADGET3' or codetp == 'GADGET4':
                 self.ds_list[timestep]['ds'] = yt.load(fld_list[timestep], unit_base = {"length": (1.0, "Mpccm/h"),"UnitVelocity_in_cm_per_s":(1e3)})
             else:
                 self.ds_list[timestep]['ds'] = yt.load(fld_list[timestep])
@@ -2433,7 +2433,7 @@ class Evolve_Tree():
     # Redundant function with the one in Initial_Halo_Finder but limits output to positions and ids
     def get_mass_pos_vel_ids(self,reg,center,radius,tp = 1,make_volume=True):
         dm_name_dict = {'ENZO':'DarkMatter','GEAR': 'DarkMatter',\
-         'GADGET3': 'DarkMatter', 'AREPO': 'DarkMatter',\
+         'GADGET3': 'DarkMatter', 'GADGET4': 'DarkMatter', 'AREPO': 'DarkMatter',\
           'GIZMO': 'DarkMatter', 'RAMSES': 'DM',\
            'ART': 'darkmatter', 'CHANGA': 'DarkMatter'}
         mass = reg[(dm_name_dict[self.codetp],'particle_mass')].in_units('Msun').v
@@ -5318,7 +5318,7 @@ class Over_Density_Finder():
     # Returns the number of particles in a region
     def get_min_mass(self,reg):
         # dm_name_dict = {'ENZO':'DarkMatter','GEAR': 'DarkMatter',\
-        #  'GADGET3': 'DarkMatter', 'AREPO': 'DarkMatter',\
+        #  'GADGET3': 'DarkMatter','GADGET4': 'DarkMatter', 'AREPO': 'DarkMatter',\
         #   'GIZMO': 'DarkMatter', 'RAMSES': 'DM',\
         #    'ART': 'darkmatter', 'CHANGA': 'DarkMatter'}
         # mass = reg[(dm_name_dict[self.codetp],'particle_mass')].in_units('Msun').v
@@ -5581,7 +5581,7 @@ def open_ds(timestep,codetp,direction=1,skip=False):
         time_sys.sleep(0.02*rank)
         if codetp == 'AREPO':
             ds = yt.load(fld_list[timestep], unit_base = {"length": (1.0, "Mpccm/h")})
-        elif codetp == 'GADGET3':
+        elif codetp == 'GADGET3' or codetp == 'GADGET4':
             ds = yt.load(fld_list[timestep], unit_base = {"length": (1.0, "Mpccm/h"),"UnitMass_in_g": 1.989e43})
         else:
             ds = yt.load(fld_list[timestep])
@@ -5622,7 +5622,7 @@ def open_ds(timestep,codetp,direction=1,skip=False):
             if os.path.exists(current_sim_folder):
                 if codetp == 'AREPO':
                     ds = yt.load(current_sim_folder, unit_base = {"length": (1.0, "Mpccm/h")})
-                elif codetp == 'GADGET3':
+                elif codetp == 'GADGET3' or codetp == 'GADGET4':
                     ds = yt.load(current_sim_folder, unit_base = {"length": (1.0, "Mpccm/h"),"UnitMass_in_g": 1.989e43})
                 else:
                     ds = yt.load(current_sim_folder)
@@ -6074,7 +6074,7 @@ def get_particle_number(ds,com_list,rad_list,codetp):
 # Returns the number of particles in a region
 def get_part_length(reg,codetp,tp=1):
     dm_name_dict = {'ENZO':'DarkMatter','GEAR': 'DarkMatter',\
-     'GADGET3': 'DarkMatter', 'AREPO': 'DarkMatter',\
+     'GADGET3': 'DarkMatter','GADGET4': 'DarkMatter', 'AREPO': 'DarkMatter',\
       'GIZMO': 'DarkMatter', 'RAMSES': 'DM',\
        'ART': 'darkmatter', 'CHANGA': 'DarkMatter'}
     mass = reg[(dm_name_dict[codetp],'particle_mass')].in_units('kg').v
@@ -6087,12 +6087,12 @@ def make_filter_star(ds_now, codetp, manual=None):
 
     If the user has a different fieldtype name for star particles in their simulation (which are not in the default list of this function), the user can provide their simulation's fieldtype name through the 'manual' variable.
     """
-    star_name_default_dict = {'GADGET3':'PartType4','GEAR':'PartType1','AREPO':'PartType4','GIZMO':'PartType4','RAMSES':'star','ART':'stars','CHANGA':'Stars'}
+    star_name_default_dict = {'GADGET3':'PartType4','GADGET4':'PartType4','GEAR':'PartType1','AREPO':'PartType4','GIZMO':'PartType4','RAMSES':'star','ART':'stars','CHANGA':'Stars'}
     #Checking manual compatibility
     if codetp == 'ENZO' and manual != None and all(isinstance(manual_i, int) for manual_i in manual) == False:
         raise ValueError("for ENZO code, manual must have integer values")
-    elif codetp in ['GADGET3','GEAR','AREPO','GIZMO','RAMSES','ART','CHANGA'] and manual != None and all(isinstance(manual_i, str) for manual_i in manual) == False:
-        raise ValueError("for GADGET3, GEAR, AREPO, GIZMO, RAMSES, ART and CHANGA codes, manual must have string values")
+    elif codetp in ['GADGET3','GADGET4','GEAR','AREPO','GIZMO','RAMSES','ART','CHANGA'] and manual != None and all(isinstance(manual_i, str) for manual_i in manual) == False:
+        raise ValueError("for GADGET3,'GADGET4', GEAR, AREPO, GIZMO, RAMSES, ART and CHANGA codes, manual must have string values")
     #
     if codetp == 'ENZO':
         def star_init(pfilter, data):
@@ -6136,7 +6136,7 @@ def pickup_particles(reg,codetp,stars=True,vel_ids=True):
         type_all = reg[('all','particle_type')].v.astype(int)
     if find_dm:
         dm_name_dict = {'GEAR': ["PartType5","PartType2"],\
-                'GADGET3': ["PartType5","PartType1"], 'AREPO': ["PartType2","PartType1"],\
+                'GADGET3': ["PartType5","PartType1"],'GADGET4': ["PartType5","PartType1"], 'AREPO': ["PartType2","PartType1"],\
                 'GIZMO': ["PartType2","PartType1"], 'RAMSES': 'DM',\
                 'ART': 'darkmatter', 'CHANGA': 'DarkMatter'}
         if codetp == 'ENZO':
@@ -6146,7 +6146,7 @@ def pickup_particles(reg,codetp,stars=True,vel_ids=True):
             if vel_ids:
                 vel = vel_all[dm_bool]
                 ids = ids_all[dm_bool]
-        elif codetp == 'GEAR' or codetp == 'GADGET3' or codetp == 'AREPO' or codetp == 'GIZMO':
+        elif codetp == 'GEAR' or codetp == 'GADGET3' or codetp == 'AREPO' or codetp == 'GIZMO' or codetp == 'GADGET4':
             for type_i in range(len(dm_name_dict[codetp])):
                 if type_i == 0:
                     mass = reg[(dm_name_dict[codetp][type_i],'particle_mass')].in_units('Msun')
@@ -6174,7 +6174,7 @@ def pickup_particles(reg,codetp,stars=True,vel_ids=True):
                 ids = np.arange(len(mass)).astype(int)
     #Adding stars
     if find_stars and stars:
-        star_name_dict = {'GADGET3':'PartType4','GEAR':'PartType1','AREPO':'PartType4','GIZMO':'PartType4','RAMSES':'star','ART':'stars','CHANGA':'Stars'}
+        star_name_dict = {'GADGET3':'PartType4','GADGET4':'PartType4','GEAR':'PartType1','AREPO':'PartType4','GIZMO':'PartType4','RAMSES':'star','ART':'stars','CHANGA':'Stars'}
         if codetp == 'ENZO':
             star_bool = np.logical_and(np.logical_or.reduce((type_all == 2, type_all == 5, type_all == 7)), mass_all > 1)
             spos = pos_all[star_bool]
@@ -6191,10 +6191,10 @@ def pickup_particles(reg,codetp,stars=True,vel_ids=True):
                         sids = reg[(star_name_dict[codetp],'particle_index')].astype(int)
                     svel = reg[(star_name_dict[codetp],'particle_velocity')].in_units('m/s')
             except:
-                spos,svel,sids = np.array([]),np.array([]),np.array([])
+                spos,svel,sids = np.reshape(np.array([]), (0,3)), np.reshape(np.array([]), (0,3)), np.array([])
     if vel_ids:
         if find_dm and (find_stars and stars):
-            return mass.in_units('kg').v,pos,vel,ids,spos,sids,svel
+            return mass.in_units('kg').v,pos,vel,ids,spos,svel,sids
         elif (find_stars and stars) and not find_dm:
             return spos,svel,sids
         elif find_dm and not (find_stars and stars):
@@ -6223,13 +6223,13 @@ def pickup_min_dm(ll,ur,codetp,ds,floormass=100):
             type_all = reg[('all','particle_type')].v.astype(int)
         if find_dm:
             dm_name_dict = {'GEAR': ["PartType5","PartType2"],\
-                    'GADGET3': ["PartType5","PartType1"], 'AREPO': ["PartType2","PartType1"],\
+                    'GADGET3': ["PartType5","PartType1"],'GADGET4': ["PartType5","PartType1"], 'AREPO': ["PartType2","PartType1"],\
                     'GIZMO': ["PartType2","PartType1"], 'RAMSES': 'DM',\
                     'ART': 'darkmatter', 'CHANGA': 'DarkMatter'}
             if codetp == 'ENZO':
                 dm_bool = np.logical_and(np.logical_or(type_all == 1, type_all==4), mass_all > 1)
                 mass = mass_all[dm_bool]
-            elif codetp == 'GEAR' or codetp == 'GADGET3' or codetp == 'AREPO' or codetp == 'GIZMO':
+            elif codetp == 'GEAR' or codetp == 'GADGET3' or codetp == 'AREPO' or codetp == 'GIZMO' or codetp == 'GADGET4':
                 for type_i in range(len(dm_name_dict[codetp])):
                     if type_i == 0:
                         mass = reg[(dm_name_dict[codetp][type_i],'particle_mass')].in_units('Msun')
@@ -6474,14 +6474,14 @@ def get_all_regions_2(halo_id,ll_total,ur_total,out_list,ds,codetp,volumes,nproc
                  width = ur_vsi-ll_vsi
                  if resave:
                      if find_stars:
-                         mass0,pos0,vel0,ids0,spos0,sids0,svel0 = pickup_particles_backup(timestep,ll_vsi,ur_vsi,ds)
+                         mass0,pos0,vel0,ids0,spos0,svel0,sids0 = pickup_particles_backup(timestep,ll_vsi,ur_vsi,ds)
                      else:
                          mass0,pos0,vel0,ids0 = pickup_particles_backup(timestep,ll_vsi,ur_vsi,ds)
                  else:
                      left,right = ll_vsi,ur_vsi
                      reg = ds.r[left[0]:right[0]:interval, left[1]:right[1]:interval, left[2]:right[2]:interval]
                      if find_stars:
-                         mass0,pos0,vel0,ids0,spos0,sids0,svel0 = pickup_particles(reg,codetp)
+                         mass0,pos0,vel0,ids0,spos0,svel0,sids0 = pickup_particles(reg,codetp)
                      else:
                          mass0,pos0,vel0,ids0 = pickup_particles(reg,codetp)
 
@@ -6670,11 +6670,11 @@ def make_filter(ds_now, codetp):
             return filter_darkmatter
         add_particle_filter("DarkMatter",function=darkmatter_init,filtered_type='all',requires=["particle_type","particle_mass"])
         ds_now.add_particle_filter("DarkMatter")
-    #combine less-refined particles and refined-particles into one field for GEAR, GIZMO, AREPO, and GADGET3
+    #combine less-refined particles and refined-particles into one field for GEAR, GIZMO, AREPO, GADGET3 and GADGET4
     if codetp == 'GEAR':
         dm = ParticleUnion("DarkMatter",["PartType5","PartType2"])
         ds_now.add_particle_union(dm)
-    if codetp == 'GADGET3':
+    if codetp == 'GADGET3' or codetp == 'GADGET4':
         dm = ParticleUnion("DarkMatter",["PartType5","PartType1"])
         ds_now.add_particle_union(dm)
     if codetp == 'AREPO' or codetp == 'GIZMO':
@@ -6879,7 +6879,9 @@ def resave_particles(ranklim=3):
             buffer = (np.array(ur_all)-np.array(ll_all))*0.05
             ll_all,ur_all = np.array(ll_all)-buffer,np.array(ur_all)+buffer
         else:
-            ll_all,ur_all = np.array(ds.domain_left_edge),np.array(ds.domain_right_edge)
+            ds_for_resave = open_ds(0, code)
+            ll_all,ur_all = np.array(ds_for_resave.domain_left_edge),np.array(ds_for_resave.domain_right_edge)
+            del ds_for_resave
         jobs = comm.bcast(jobs,root=0)
         for rank_now in ranks:
             if rank == rank_now:
@@ -6894,17 +6896,40 @@ def resave_particles(ranklim=3):
                         ur = np.reshape(ur,(ur.shape[0]*ur.shape[1]*ur.shape[2],3))
                         ds,meter = open_ds(t,code)
                         reg = ds.all_data()
-                        mass,pos,vel,ids = pickup_particles(reg,code)
-                        bool_reg = (np.sum(pos >= ll_all*meter,axis=1) ==3)*(np.sum(pos < ur_all*meter,axis=1) ==3)
-                        mass,pos,vel,ids = mass[bool_reg],pos[bool_reg],vel[bool_reg],ids[bool_reg]
+                        if find_dm == True and find_stars == False:
+                            mass,pos,vel,ids = pickup_particles(reg,code, find_dm, find_stars)
+                            bool_reg = (np.sum(pos >= ll_all*meter,axis=1) ==3)*(np.sum(pos < ur_all*meter,axis=1) ==3)
+                            mass,pos,vel,ids = mass[bool_reg],pos[bool_reg],vel[bool_reg],ids[bool_reg]
+                        elif find_dm == False and find_stars == True:
+                            spos, svel, sids = pickup_particles(reg, code, find_dm, find_stars)
+                            sbool_reg = (np.sum(spos >= ll_all*meter,axis=1) ==3)*(np.sum(spos < ur_all*meter,axis=1) ==3)
+                            spos,svel,sids = spos[sbool_reg],svel[sbool_reg],sids[sbool_reg]
+                        elif find_dm == True and find_stars == True:
+                            mass,pos,vel,ids,spos,svel,sids = pickup_particles(reg, code, find_dm, find_stars)
+                            bool_reg = (np.sum(pos >= ll_all*meter,axis=1) ==3)*(np.sum(pos < ur_all*meter,axis=1) ==3)
+                            mass,pos,vel,ids = mass[bool_reg],pos[bool_reg],vel[bool_reg],ids[bool_reg]
+                            sbool_reg = (np.sum(spos >= ll_all*meter,axis=1) ==3)*(np.sum(spos < ur_all*meter,axis=1) ==3)
+                            spos,svel,sids = spos[sbool_reg],svel[sbool_reg],sids[sbool_reg]
                         sto[t]['ll'] = ll
                         sto[t]['ur'] = ur
                         for v in range(len(ll)):
-                            part = {}
-                            bool_in = (np.sum(pos >= ll[v]*meter,axis=1) ==3)*(np.sum(pos < ur[v]*meter,axis=1) ==3)
-                            part['pos'],part['mass'],part['vel'],part['ids'] = pos[bool_in],mass[bool_in],vel[bool_in],ids[bool_in]
-                            np.save(save_part+'/part_%s_%s.npy' % (t,v),part)
-                        mass,pos,vel,ids = 0,0,0,0
+                            if find_dm == True:
+                                part = {}
+                                bool_in = (np.sum(pos >= ll[v]*meter,axis=1) ==3)*(np.sum(pos < ur[v]*meter,axis=1) ==3)
+                                part['pos'],part['mass'],part['vel'],part['ids'] = pos[bool_in],mass[bool_in],vel[bool_in],ids[bool_in]
+                                if find_stars == True:
+                                    sbool_in = (np.sum(spos >= ll[v]*meter,axis=1) ==3)*(np.sum(spos < ur[v]*meter,axis=1) ==3)
+                                    part['spos'],part['svel'],part['sids'] = spos[sbool_in],svel[sbool_in],sids[sbool_in]
+                                np.save(save_part+'/part_%s_%s.npy' % (t,v),part)
+                            elif find_dm == False and find_stars == True:
+                                part = np.load(save_part+'/part_%s_%s.npy' % (t,v),allow_pickle=True).tolist()
+                                sbool_in = (np.sum(spos >= ll[v]*meter,axis=1) ==3)*(np.sum(spos < ur[v]*meter,axis=1) ==3)
+                                part['spos'],part['svel'],part['sids'] = spos[sbool_in],svel[sbool_in],sids[sbool_in]
+                                np.save(save_part+'/part_%s_%s.npy' % (t,v),part)
+                        if find_dm == True:
+                            mass,pos,vel,ids = 0,0,0,0
+                        if find_stars == True:
+                            spos, svel, sids = 0,0,0
                         reg = 0
                         ds = 0
         part_dict = comm.bcast(part_dict,root=0)
@@ -6973,7 +6998,7 @@ def pickup_particles_backup(timestep,left,right,ds,stars=True,vel_ids=True):
     #print(mass)
     if vel_ids:
         if find_stars and stars:
-            return mass,pos,vel,ids,spos,sids,svel
+            return mass,pos,vel,ids,spos,svel,sids
         else:
             return mass,pos,vel,ids
     else:
@@ -7106,7 +7131,7 @@ if __name__ == "__main__":
         path = string
         find_dm = True
         find_stars = False
-        resave = False
+        resave = False # recommended to turn on for particle-based codes (GEAR, GIZMO, CHANGA, GAGDET3) due to potential loading issue with yt
         last_timestep = len(fld_list) - 1
         if fake:
             find_stars = False
@@ -7118,10 +7143,8 @@ if __name__ == "__main__":
           print('Save iteration: ',fldn)
          #minmass_calc(code)
         #refined = False
-        if code == 'GEAR' or code == 'GIZMO' or code == 'CHANGA' or code == 'GADGET3':# or code == 'ENZO':
-                resave = True
-        # if resave:
-        #     resave_particles()
+        if resave:
+            resave_particles()
         Evolve_Tree(plot=False,codetp=code,skip_large=False,verbose=False,\
             from_tree=False,last_timestep=last_timestep,multitree=True,refined=refined,video=False,trackbig=False,tracktime=True)
         if organize_files and rank==0:

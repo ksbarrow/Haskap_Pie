@@ -47,12 +47,15 @@ def make_pfs_allsnaps(folder,folder2, codetp, base_manual = None, checkredshift 
                  ["RS", "restart"]]
         for b in bases:
             snapshot_files += glob.glob("%s/%s????/%s????" % (folder,b[0],b[1]))
-    elif codetp == 'GADGET3':
-        bases = ["snapshot_", "snapshot_"]
-        snapshot_files += glob.glob("%s/%s???/%s???.0.hdf5" % (folder,bases[0], bases[1]))
+    elif codetp == 'GADGET3' or codetp == 'GADGET4':
+        bases = [["snapshot_", "snapshot_"],
+                 ["snapdir_", "snapshot_"]]
+        for b in bases:
+            snapshot_files += glob.glob("%s/%s???/%s???.0.hdf5" % (folder,b[0], b[1]))
     elif codetp == 'AREPO':
-        bases = "snap_"
-        snapshot_files += glob.glob("%s/%s???.hdf5" % (folder,bases))
+        bases = ["snap_", "snapshot_"]
+        for b in bases:
+            snapshot_files += glob.glob("%s/%s???.hdf5" % (folder,b))
     elif codetp == 'GIZMO':
         bases = "snapshot_"
         snapshot_files += glob.glob("%s/%s???.hdf5" % (folder,bases))
