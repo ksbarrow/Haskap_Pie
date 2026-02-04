@@ -41,6 +41,8 @@ To ensure it has installed correctly, run either `pip list` or `pip freeze` to e
 
 We recommend using git, as it will contain the most recent version of Haskap Pie.
 
+To use Haskap Pie on a Windows System, the package needs to be installed in the Windows Subsystem for Linux (WSL). Some dependencies for Haskap Pie do not compile on Windows systems.
+
 ## Documentation
 
 Haskap Pie can be used on both on an individual machine or a High Performance Computing (HPC) cluster. In [examples](examples/), there are example bash files to run Haskap Pie.
