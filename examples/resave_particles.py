@@ -207,7 +207,7 @@ def resave_particles(ranklim=30):
     if rank==0 and len(part_dict)==0:
         np.save(save_part+'/part_dict.npy',sto)
 
-fldn = 2019
+fldn = 2019 #make sure that this matches with the version in haskap.py
 skip = 1
 code = sys.argv[1]
 savestring = sys.argv[2]
