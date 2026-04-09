@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "haskap"
+version = "0.9.0"
 description = "Haskap Pie: A Halo finding Algorithm with efficient Sampling, K-means clustering, tree-Assembly, Particle tracking, Python modules, Inter-code applicability, and Energy solving"
 authors = [
     { name="Kirk Barrow", email="kbarrow@illinois.edu" }
@@ -30,6 +31,7 @@ dependencies = [
     "healpy",
     "natsort",
     "mpi4py",
+    "h5py",
 
 ]
 

@@ -7,10 +7,9 @@ A Halo finding Algorithm with efficient Sampling, K-means clustering, tree-Assem
 
 When using this code, please cite the following papers:
 
-Haskap Pie: Barrow, Nguyen, & Scrabacz 2025, ApJ, [Edition], [Article], [Link] \
-Haskap Pie II: Barrow, Nguyen, & Scrabacz 2025, ApJ, In Prep
+Haskap Pie: Barrow, Nguyen, & Scrabacz 2026, ApJ, 999, 72, [Link](http://doi.org/10.3847/1538-4357/ae2eb4) \
+AGORA XI Halo Morphologies: Barrow et al, and the AGORA Collaboration, ApJ, In Prep
 
-A draft of Haskap Pie I is available [here](Haskap_Pie_Paper_Draft.pdf) (most recent) or on the [arXiv](https://arxiv.org/abs/2505.22709)
 
 ## Installation
 
@@ -26,7 +25,6 @@ python --version
 
 Ensure that the version is greater than or equal to python 3.12.
 
-Then, Haskap Pie can be installed in two ways.
 
 Using git, Haskap Pie can be installed with the following:
 ```
@@ -39,18 +37,16 @@ cd ..
 
 To ensure it has installed correctly, run either `pip list` or `pip freeze` to ensure it is in the list of installed packages.
 
-Using pip, Haskap Pie can be installed from PyPI with the following:
-```
-pip install haskap
-```
 
 We recommend using git, as it will contain the most recent version of Haskap Pie.
+
+To use Haskap Pie on a Windows System, the package needs to be installed in the Windows Subsystem for Linux (WSL). Some dependencies for Haskap Pie do not compile on Windows systems.
 
 ## Documentation
 
 Haskap Pie can be used on both on an individual machine or a High Performance Computing (HPC) cluster. In [examples](examples/), there are example bash files to run Haskap Pie.
 
-Dependencies should be installed with this package, but are also listed in [requirements.txt](requirements.txt)
+Dependencies should be installed with this package. Haskap Pie also needs a minimum of 5 timesteps/snapshots of the simulation you are attemping to run it on.
 
 To run Haskap Pie, your simulation must be one of the following codes:
 
