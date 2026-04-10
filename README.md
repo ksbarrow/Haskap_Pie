@@ -58,6 +58,7 @@ To run Haskap Pie, your simulation must be one of the following codes:
 - [`CHANGA`](https://faculty.washington.edu/trq/hpcc/tools/changa.html)
 - [`GEAR`](https://github.com/mladenivkovic/thesis_public)
 - [`RAMSES`](https://github.com/ramses-organisation/ramses)
+- GADGET4
 
 Your directory structure should following the following
 
