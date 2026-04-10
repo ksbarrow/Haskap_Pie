@@ -7,6 +7,8 @@ import numpy as np
 import sys, os
 from yt.data_objects.particle_filters import add_particle_filter
 from yt.data_objects.unions import ParticleUnion
+from haskap.make_pfs_allsnaps import make_pfs_allsnaps
+
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 rank = comm.rank
@@ -209,10 +211,14 @@ def resave_particles(ranklim=30):
 
 fldn = 2019 #make sure that this matches with the version in haskap.py
 skip = 1
-code = sys.argv[1]
-savestring = sys.argv[2]
+string = sys.argv[1] 
+code = sys.argv[2]
+savestring = sys.argv[3]
 find_stars = False #enable this if you want the position, velocity, and ids of stars to be exported (along with the DM metadata)
 find_dm = True #only disable this if the DM partsave files are already available, and the star metadata are just appended to the partsave files
+
+if not os.path.exists(savestring +  '/pfs_allsnaps_%s.txt' % fldn):
+    make_pfs_allsnaps(string,savestring,code,index=fldn)
 fld_list = np.loadtxt(savestring + '/pfs_allsnaps_%s.txt' % fldn,dtype=str)[:,0]
 last_timestep = len(fld_list) - 1
 #print(savestring + '/pfs_allsnaps_%s.txt' % fldn)
