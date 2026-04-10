@@ -16,9 +16,10 @@
 #SBATCH --error=resave_particles.e%j
 #SBATCH --output=resave_particles.o%j
 
-## $1 is code type, one of ENZO, GADGET3, GADGET4, AREPO, GIZMO, ART, CHANGA, GEAR, RAMSES, manual
-## $2 is os save directory: eg. box1
+## $1 is location of simulation snapshots: eg. /path/to/sim/box1/
+## $2 is code type, one of ENZO, GADGET3, GADGET4, AREPO, GIZMO, ART, CHANGA, GEAR, RAMSES, manual
+## $3 is os save directory: eg. box1
 
 date
-mpirun python resave_particles.py $1 $2
+mpirun python resave_particles.py $1 $2 $3
 date
