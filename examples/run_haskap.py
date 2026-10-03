@@ -2578,6 +2578,7 @@ class Evolve_Tree():
                                         replace=False)
                                     bool_ids = np.logical_or(np.isin(ids,ids[bool_ids_l]),bool_ids)
             mass,pos,vel,es = mass0[bool_bound],pos0[bool_bound],vel0[bool_bound],-1*es[bool_bound]
+            es_halo = (KE - PE)[bool_bound]
             oden_list0 = np.append(np.array(oden_list),oden)
             #print(rs[0],rmax,rvir)
             #print(cden,rvir/self.meter,len(mass),halo,'inital',self.halotree[halo][con_dir]['r200'])
@@ -2614,7 +2615,7 @@ class Evolve_Tree():
                     #print(cden_1)
                     if cden_1 >  75 and rvir0/self.meter > 0.5*min(rad_before,self.rad_list[r]) and cden_1 <700:
                         used_hull = True
-                        more_variables_i,more_variables_vec = more_var_maker(pos,mass,vel,rvir0,esr,es,estep_f,hull,com,self.meter,self.kg_sun,cden_1,self.ds,radmax=rmax)
+                        more_variables_i,more_variables_vec = more_var_maker(pos,mass,vel,rvir0,esr,es,es_halo,estep_f,hull,com,self.meter,self.kg_sun,cden_1,self.ds,radmax=rmax)
                 if not used_hull or cden_1 > max(oden_list) or mass_1 < 0.75*mass[rs[bool_bound] < rad_max].sum():
                     estep_f = 0
                     rad_200_i = np.arange(len(oden_list0))[abs(cden-200)==abs(cden-200).min()].min()
@@ -4217,6 +4218,7 @@ class detect_halos():
                                         Energies = Find_KE_PE(self.mass[untaged][halo_bool],self.pos[untaged][halo_bool],self.vel[untaged][halo_bool],multi=multi2)
                                         KE,PE = Energies.KE,Energies.PE
                                         es = KE-PE
+                                        es_halo = KE - (0.5 * PE)
                                         com2 = FindCOM(-1*es[es <0],self.pos[untaged][halo_bool][es <0])
                                         if (timing)  and time_sys.time()-time3 >timing:
                                             print('Confirmed Energies 2',i,time_sys.time()-time3,'len:',len(self.mass[untaged][halo_bool]))
@@ -4295,7 +4297,7 @@ class detect_halos():
                                                     massl.append(mass_1)
                                                     rvir = rvir_1
                                                     more_variables_i,more_variables_vec = more_var_maker(self.pos[untaged][halo_bool],self.mass[untaged][halo_bool],\
-                                                        self.vel[untaged][halo_bool],rvir,esr,es,estep_f,hull,com2,self.lu,self.kg_sun,cden_1,self.ds,radmax=radmax)
+                                                        self.vel[untaged][halo_bool],rvir,esr,es,es_halo,estep_f,hull,com2,self.lu,self.kg_sun,cden_1,self.ds,radmax=radmax)
                                                     # print(a/b,a/c,dist_com_1,dist_com_2,fill_sphere,fill_ellipsoid)
                                                 #m200.append(self.mass[unt_ind[untaged][halo_bool][es <0][r<r200]].sum())
 
@@ -7088,7 +7090,7 @@ def make_var_names():
     var_names_vec = ['a','b','c','j','hull_energy_center','hull_mass_center']
     return var_names_scalar,var_names_vec
 
-def more_var_maker(pos,mass,vel,rvir,esr,es,estep_f,hull,com2,self_lu,self_kg_sun,cden_1,ds,radmax=1e50):
+def more_var_maker(pos,mass,vel,rvir,esr,es,es_halo,estep_f,hull,com2,self_lu,self_kg_sun,cden_1,ds,radmax=1e50):
     rvir_cden,cden_r,mden_r = Find_virRad(com2,pos[es<0],mass[es<0],ds,oden=[cden_1],radmax=radmax)
     #print(rvir_cden/self_lu)
     center_of_energy = FindCOM(-1*es[esr<estep_f],pos[esr<estep_f])
@@ -7099,7 +7101,7 @@ def more_var_maker(pos,mass,vel,rvir,esr,es,estep_f,hull,com2,self_lu,self_kg_su
     #print(center_of_hull)
     J = np.sum(np.cross(mass[esr<estep_f][:,np.newaxis]*(pos[esr<estep_f]-com2),vel[esr<estep_f]-meanv),axis=0)
     j = J/mass[esr<estep_f].sum()
-    spin = (np.linalg.norm(J)*abs((mass[esr<estep_f]*es[esr<estep_f]).sum())**(1/2))/(6.6743e-11*mass[esr<estep_f].sum()**(5/2))
+    spin = (np.linalg.norm(J)*abs((mass[esr<estep_f]*es_halo[esr<estep_f]).sum())**(1/2))/(6.6743e-11*mass[esr<estep_f].sum()**(5/2))
     #print(spin)
     weighted_pos = pos[esr<estep_f]
     fweights = 2*mass[esr<estep_f]*self_kg_sun/minmass
