@@ -8,7 +8,7 @@ A Halo finding Algorithm with efficient Sampling, K-means clustering, tree-Assem
 When using this code, please cite the following papers:
 
 Haskap Pie: Barrow, Nguyen, & Scrabacz 2026, ApJ, 999, 72, [Link](http://doi.org/10.3847/1538-4357/ae2eb4) \
-AGORA XI Halo Morphologies: Barrow et al, and the AGORA Collaboration, ApJ, In Prep
+AGORA XI Halo Morphologies: Barrow et al, and the AGORA Collaboration, Submitted to The Astrophysical Journal [Link](https://doi.org/10.48550/arXiv.2605.24097)
 
 
 ## Installation
