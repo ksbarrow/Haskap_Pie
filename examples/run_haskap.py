@@ -2578,7 +2578,7 @@ class Evolve_Tree():
                                         replace=False)
                                     bool_ids = np.logical_or(np.isin(ids,ids[bool_ids_l]),bool_ids)
             mass,pos,vel,es = mass0[bool_bound],pos0[bool_bound],vel0[bool_bound],-1*es[bool_bound]
-            es_halo = (KE - PE)[bool_bound]
+            es_halo = np.abs((KE - PE)[bool_bound])
             oden_list0 = np.append(np.array(oden_list),oden)
             #print(rs[0],rmax,rvir)
             #print(cden,rvir/self.meter,len(mass),halo,'inital',self.halotree[halo][con_dir]['r200'])
@@ -4218,7 +4218,7 @@ class detect_halos():
                                         Energies = Find_KE_PE(self.mass[untaged][halo_bool],self.pos[untaged][halo_bool],self.vel[untaged][halo_bool],multi=multi2)
                                         KE,PE = Energies.KE,Energies.PE
                                         es = KE-PE
-                                        es_halo = KE - (0.5 * PE)
+                                        es_halo = np.abs(KE - (0.5 * PE))
                                         com2 = FindCOM(-1*es[es <0],self.pos[untaged][halo_bool][es <0])
                                         if (timing)  and time_sys.time()-time3 >timing:
                                             print('Confirmed Energies 2',i,time_sys.time()-time3,'len:',len(self.mass[untaged][halo_bool]))
@@ -7101,7 +7101,7 @@ def more_var_maker(pos,mass,vel,rvir,esr,es,es_halo,estep_f,hull,com2,self_lu,se
     #print(center_of_hull)
     J = np.sum(np.cross(mass[esr<estep_f][:,np.newaxis]*(pos[esr<estep_f]-com2),vel[esr<estep_f]-meanv),axis=0)
     j = J/mass[esr<estep_f].sum()
-    spin = (np.linalg.norm(J)*abs((mass[esr<estep_f]*es_halo[esr<estep_f]).sum())**(1/2))/(6.6743e-11*mass[esr<estep_f].sum()**(5/2))
+    spin = (np.linalg.norm(J)*abs((mass[esr<estep_f]*es_halo[esr<estep_f]).sum())**(1/2))/(6.6743e-11*mass[esr<estep_f].sum()**(5/2)).real
     #print(spin)
     weighted_pos = pos[esr<estep_f]
     fweights = 2*mass[esr<estep_f]*self_kg_sun/minmass
