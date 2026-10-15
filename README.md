@@ -53,12 +53,12 @@ To run Haskap Pie, your simulation must be one of the following codes:
 - [`ENZO`](https://github.com/enzo-project/enzo-dev)
 - [`GADGET3`](https://github.com/sbird/MP-Gadget3)
 - [`AREPO`](https://arepo-code.org/wp-content/userguide/index.html)
-- ART
+- [`ART`](https://arxiv.org/abs/0803.4343v1)
 - [`GIZMO`](http://www.tapir.caltech.edu/~phopkins/Site/GIZMO.html)
 - [`CHANGA`](https://faculty.washington.edu/trq/hpcc/tools/changa.html)
 - [`GEAR`](https://github.com/mladenivkovic/thesis_public)
 - [`RAMSES`](https://github.com/ramses-organisation/ramses)
-- GADGET4
+- [`GADGET4`](https://gitlab.mpcdf.mpg.de/vrs/gadget4)
 
 Your directory structure should following the following
 
