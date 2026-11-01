@@ -359,7 +359,7 @@ class Evolve_Tree():
                         #self.halotree = comm.bcast(self.halotree,root=0)
                         self.send_halotree()
                         self.make_active_list(backlook=self.direction)
-                        del self.ds
+                        #del self.ds
                     # Plots the halos for creating videos
                     if video and 1==2:
                         if len_now%(int(1*self.interval)) == 2:
@@ -980,7 +980,7 @@ class Evolve_Tree():
                     if rank ==0 and find_stars:
                         if halo in self.star_id['ids']:
                             star_id_ids_new[halo] = {}
-                            star_id_ids_energies_new[halo] = {}
+                            star_id_energies_new[halo] = {}
                             if time in self.star_id['ids'][halo]:
                                 star_id_ids_new[halo][time] = self.star_id['ids'][halo][time]
                                 star_id_energies_new[halo][time] = self.star_id['energies'][halo][time]
@@ -1369,13 +1369,13 @@ class Evolve_Tree():
 
     # Makes folders and directories as needed
 
-    def make_arbor(self):
-        my_storage = {}
-        if rank==0:
-            if not os.path.exists(savestring + '/arbor_tree.h5'):
-                if os.path.exists(string + '/rockstar_halos' + '/trees/' + 'tree_0_0_0.dat'):
-                    halos = ytree.load(string + '/rockstar_halos' + '/trees/' + 'tree_0_0_0.dat')
-                    fn = halos.save_arbor(filename=savestring + '/arbor_tree.h5')
+    #def make_arbor(self):
+    #    my_storage = {}
+    #    if rank==0:
+    #        if not os.path.exists(savestring + '/arbor_tree.h5'):
+    #            if os.path.exists(string + '/rockstar_halos' + '/trees/' + 'tree_0_0_0.dat'):
+    #                halos = ytree.load(string + '/rockstar_halos' + '/trees/' + 'tree_0_0_0.dat')
+    #                fn = halos.save_arbor(filename=savestring + '/arbor_tree.h5')
         # for sto, times in yt.parallel_objects(range(len(fld_list)),nprocs, storage = my_storage):
         #     if not os.path.exists(savestring + '/' + sim + '/arbor_%s.h5' % (times+offset)):
         #         if os.path.exists(string + '/' + sim + '/rockstar_halos' + '/' + 'out_%s.list' % (times+offset)):
@@ -4841,7 +4841,8 @@ class Initial_Halo_Tree():
             self.var_names_vec = []
             self.more_vec = []
 
-        del self.ds,self.lu,self.kg_sun
+        #del self.ds,self.lu,self.kg_sun
+        del self.lu,self.kg_sun
 
 
 class Over_Density_Finder():
